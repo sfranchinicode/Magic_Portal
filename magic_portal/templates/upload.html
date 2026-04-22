@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload to {{ portal|capitalize }} Portal</title>
+</head>
+<body>
+    <h2>Upload Image to {{ portal|capitalize }} Portal</h2>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+            {% for message in messages %} 
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <form method="post" enctype="multipart/form-data">
+        Password: <input type="password" name="password" required><br><br>
+        File: <input type="file" name="file" accept="image/*" required><br><br>
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html>
