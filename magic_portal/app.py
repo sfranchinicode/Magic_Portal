@@ -7,7 +7,7 @@ pillow_heif.register_heif_opener()
 
 app = Flask(__name__)
 app.config['MAX_CONTENT-LENGTH'] = 50 * 1024 * 1024
-app.secret_key = "1uCy09!" 
+app.secret_key = "" 
 
 UPLOAD_FOLDERS = {
     "art": "static/art",
@@ -16,8 +16,8 @@ UPLOAD_FOLDERS = {
 
 ALLOWED_EXTENSIONS = {'png' , 'jpg', 'jpeg', 'gif', 'heic'}
 UPLOAD_PASSWORDS = {
-    "art": "Lucy45t!!",
-    "photos": "54mPh0t0$"
+    "art": "",
+    "photos": ""
 }
 
 def allowed_file(filename):
