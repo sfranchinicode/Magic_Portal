@@ -7,7 +7,7 @@ pillow_heif.register_heif_opener()
 
 app = Flask(__name__)
 app.config['MAX_CONTENT-LENGTH'] = 50 * 1024 * 1024
-app.secret_key = "" 
+app.secret_key = os.environ.get("FLASK_SECRET_KEY")
 
 UPLOAD_FOLDERS = {
     "art": "static/art",
@@ -16,8 +16,8 @@ UPLOAD_FOLDERS = {
 
 ALLOWED_EXTENSIONS = {'png' , 'jpg', 'jpeg', 'gif', 'heic'}
 UPLOAD_PASSWORDS = {
-    "art": "",
-    "photos": ""
+    "art": os.environ.get("ART_PASSWORD"),
+    "photos": os.environ.get("PHOTOS_PASSWORD")
 }
 
 def allowed_file(filename):
@@ -49,7 +49,12 @@ def upload(portal):
 
             file.save(save_path)
             if filename.lower().endswith(".heic"):
-                img = Image.open(save_path)
+                try:
+                    img = Image.open(save_path)
+                except Exception:
+                    os.remove(save_path)
+                    flash("Invalid image file")
+                return redirect(request.url)
                 new_filename = os.path.splitext(filename)[0] + ".jpeg"
                 new_save_path = os.path.join(UPLOAD_FOLDERS[portal], new_filename)
                 img.convert("RGB").save(new_save_path, "JPEG")
@@ -65,4 +70,4 @@ def upload(portal):
     return render_template("upload.html", portal=portal)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    debug=os.environ.get("FLASK_DEBUG") == "1"
